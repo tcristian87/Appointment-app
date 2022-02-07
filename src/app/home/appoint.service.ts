@@ -14,7 +14,8 @@ export class AppointService {
       'c1',
       'Cristi',
       '0741879460',
-      '2022-02-07T10:00:00+02:00',
+      '10:30',
+      '10-02-2022',
       'Tuns',
       'abc'
     ),
@@ -22,7 +23,8 @@ export class AppointService {
       'c2',
       'Mishi',
       '0741879460',
-      '2022-02-08T11:00:00+02:00',
+      '11:00',
+      '09-02-2022',
       'Tuns',
       'abc'
     ),
@@ -30,7 +32,8 @@ export class AppointService {
       'c3',
       'Radu',
       '0741879460',
-      '2022-02-07T10:00:00+02:00',
+      '11:30',
+      '08-02-2022',
       'Tuns',
       'abc'
     ),
@@ -38,38 +41,147 @@ export class AppointService {
       'c4',
       'Ciprian',
       '0741879460',
-      '2022-02-07T11:00:00+02:00',
+      '12:00',
+      '07-02-2022',
+      'Tuns',
+      'abc'
+    ),    new Appoint(
+      'c1',
+      'Cristi',
+      '0741879460',
+      '10:30',
+      '10-02-2022',
       'Tuns',
       'abc'
     ),
+    new Appoint(
+      'c2',
+      'Mishi',
+      '0741879460',
+      '11:00',
+      '09-02-2022',
+      'Tuns',
+      'abc'
+    ),
+    new Appoint(
+      'c3',
+      'Radu',
+      '0741879460',
+      '11:30',
+      '08-02-2022',
+      'Tuns',
+      'abc'
+    ),
+    new Appoint(
+      'c4',
+      'Ciprian',
+      '0741879460',
+      '12:00',
+      '07-02-2022',
+      'Tuns',
+      'abc'
+    ),
+    new Appoint(
+      'c1',
+      'Cristi',
+      '0741879460',
+      '10:30',
+      '10-02-2022',
+      'Tuns',
+      'abc'
+    ),
+    new Appoint(
+      'c2',
+      'Mishi',
+      '0741879460',
+      '11:00',
+      '09-02-2022',
+      'Tuns',
+      'abc'
+    ),
+    new Appoint(
+      'c3',
+      'Radu',
+      '0741879460',
+      '11:30',
+      '08-02-2022',
+      'Tuns',
+      'abc'
+    ),
+    new Appoint(
+      'c4',
+      'Ciprian',
+      '0741879460',
+      '12:00',
+      '07-02-2022',
+      'Tuns',
+      'abc'
+    ),
+    new Appoint(
+      'c1',
+      'Cristi',
+      '0741879460',
+      '10:30',
+      '10-02-2022',
+      'Tuns',
+      'abc'
+    ),
+    new Appoint(
+      'c2',
+      'Mishi',
+      '0741879460',
+      '11:00',
+      '09-02-2022',
+      'Tuns',
+      'abc'
+    ),
+    new Appoint(
+      'c3',
+      'Radu',
+      '0741879460',
+      '11:30',
+      '08-02-2022',
+      'Tuns',
+      'abc'
+    ),
+    new Appoint(
+      'c4',
+      'Ciprian',
+      '0741879460',
+      '12:00',
+      '07-02-2022',
+      'Tuns',
+      'abc'
+    ),
+
   ]);
 
   get appoints() {
-    // eslint-disable-next-line no-underscore-dangle
     return this._appoints.asObservable();
   }
 
   getClient(id: string) {
     return this.appoints.pipe(
       take(1),
-      map((appoints) => {
-        return { ...appoints.find((d) => d.id === id) };
-      })
+      map((appoints) => ({ ...appoints.find((d) => d.id === id) }))
     );
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   constructor(private authService: AuthService) {}
 
   addAppoint(
     name: string,
     phone: string,
+    hour: string,
     date: string,
-    service: string
+    service: string,
   ) {
     const newAppoint = new Appoint(
       Math.random().toString(),
       name,
       phone,
+      hour,
       date,
       service,
       this.authService.userId

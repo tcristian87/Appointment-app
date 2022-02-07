@@ -9,22 +9,62 @@
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col size="12" size-sm="8" offset-sm="2" class="ion-text-center">
+      <ion-col size-sm="6" offset-sm="3">
         <ion-item>
-          <ion-input
-            [value]="date | date: 'fullDate'"
-            placeholder="Please select a date"
-          ></ion-input>
-          <ion-button fill="clear" id="open-date-input-2">
+          <ion-button slot="start" id="open-date-input-2">
             <ion-icon icon="calendar"></ion-icon>
           </ion-button>
-
+          <ion-input
+            [value]="date | date: 'dd-MM-yyyy'"
+            [(ngModel)]="date"
+            clearInput
+          ></ion-input>
           <ion-popover trigger="open-date-input-2" show-backdrop="false">
             <ng-template>
               <ion-datetime
-                #dateTime
+                #popoverDatetime
+                #popoverHour
                 presentation="date"
-                (ionChange)="date = dateTime.value"
+                (ionChange)="date = formatDate(popoverDatetime.value)"
+              ></ion-datetime>
+            </ng-template>
+          </ion-popover>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col
+        size="4"
+        size-sm="6"
+        offset-sm="3"
+        *ngFor="let appoints of appoints | filter:  date"
+      >
+        <ion-item [routerLink]="['/', 'appointments-details', appoints.id]"
+          >{{appoints.hour}}</ion-item
+        >
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-item>Today</ion-item>
+</ion-content>
+<!-- <ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size-sm="6" offset-sm="3">
+        <ion-item>
+          <ion-button slot="start" id="open-date-input-2">
+            <ion-icon icon="calendar"></ion-icon>
+          </ion-button>
+            <ion-input [value]="date | date: 'dd-MM-yyyy'" [(ngModel)]="date" clearInput></ion-input>
+          <ion-popover trigger="open-date-input-2" show-backdrop="false">
+            <ng-template>
+              <ion-datetime
+                #popoverDatetime
+                #popoverHour
+                presentation="date"
+                (ionChange)="date = formatDate(popoverDatetime.value)"
               ></ion-datetime>
             </ng-template>
           </ion-popover>
@@ -58,4 +98,4 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-</ion-content>
+</ion-content> -->

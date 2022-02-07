@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppointService } from '../appoint.service';
 
+
 @Component({
   selector: 'app-new-appoint',
   templateUrl: './new-appoint.page.html',
@@ -19,22 +20,23 @@ export class NewAppointPage implements OnInit {
     this.form = new FormGroup({
       name: new FormControl(null, {
         updateOn: 'blur',
-        // validators: [Validators.required],
+        validators: [Validators.required],
       }),
       phone: new FormControl(null, {
         updateOn: 'blur',
-        // validators: [Validators.required],
+        validators: [Validators.required],
       }),
       hour: new FormControl(null, {
         updateOn: 'blur',
         // validators: [Validators.required],
       }),
       date: new FormControl(null, {
-        updateOn: 'blur',
+        updateOn: 'change',
+        validators: [Validators.required],
       }),
-      service: new FormControl(null, {
+    service: new FormControl(null, {
         updateOn: 'blur',
-        // validators: [Validators.required],
+        validators: [Validators.required],
       }),
     });
   }
@@ -45,13 +47,12 @@ export class NewAppointPage implements OnInit {
     this.appointService.addAppoint(
       this.form.value.name,
       this.form.value.phone,
+      this.form.value.hour,
       this.form.value.date,
       this.form.value.service
     );
-    console.log(this.form.value.date);
     this.form.reset();
     this.router.navigate(['/home/tabs/book-appointment']);
   }
-
 
 }

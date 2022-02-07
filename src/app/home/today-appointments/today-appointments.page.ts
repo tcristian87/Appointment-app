@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 export class TodayAppointmentsPage implements OnInit, OnDestroy {
   appoints: Appoint[];
   today = Date.now();
-  tDay = format(new Date(this.today), 'dd.MM.yyyy');
+  tDay = format(new Date(this.today), 'dd-MM-yyyy');
   date = this.tDay;
 
   private appointSub: Subscription;
@@ -25,7 +25,6 @@ export class TodayAppointmentsPage implements OnInit, OnDestroy {
     this.appointSub = this.appointsService.appoints.subscribe((appoint) => {
       this.appoints = appoint;
     });
-    console.log(this.date)
   }
   onEdit(appointsId: string, slidingCard: IonItemSliding) {
     slidingCard.close();

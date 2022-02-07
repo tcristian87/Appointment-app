@@ -52,7 +52,7 @@
               #popoverDatetime
               #popoverHour
               presentation="date-time"
-              (ionChange)="[date = popoverDatetime.value, hour = popoverHour.value]"
+              (ionChange)="[date = formatDate(popoverDatetime.value), hour = popoverHour.value]"
               showDefaultButtons="true"
             ></ion-datetime>
           </ng-template>

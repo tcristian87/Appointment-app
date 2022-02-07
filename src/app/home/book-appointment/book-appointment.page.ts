@@ -15,6 +15,7 @@ export class BookAppointmentPage implements OnInit, OnDestroy {
   appoints: Appoint[];
   date: string;
   datetime: any;
+  hour: any;
 
   private appointsSub: Subscription;
 
@@ -24,7 +25,6 @@ export class BookAppointmentPage implements OnInit, OnDestroy {
     this.appointsSub = this.appointService.appoints.subscribe((appoints) => {
       this.appoints = appoints;
     });
-    console.log(this.appoints);
   }
 
   onEdit(appointsId: string, slidingItem: IonItemSliding) {
@@ -39,4 +39,9 @@ export class BookAppointmentPage implements OnInit, OnDestroy {
       this.appointsSub.unsubscribe();
     }
   }
+  formatDate(value: string) {
+    return format(parseISO(value), 'dd-MM-yyyy');
+  }
+
+
 }

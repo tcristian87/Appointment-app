@@ -30,32 +30,38 @@
         </ion-item>
       </ion-col>
 
-      <ion-col size-sm="6" offset-sm="3">
+      <ion-col size-sm="7" offset-sm="3">
         <ion-item>
           <ion-button slot ="start" id="open-date-input-2">
             <ion-icon icon="calendar"></ion-icon>
           </ion-button>
-          <ion-input [value]="date | date: 'EEE, MMM dd'" slot="start"></ion-input>
-          <ion-input [value]="hour | date: 'shortTime'" slot="end"></ion-input>
+          <ion-input formControlName="date" [value]="date | date: 'dd-MM-yyyy'" slot="start" ></ion-input>
+          <ion-input [value]="hour | date: 'shortTime'"></ion-input>
           <ion-popover trigger="open-date-input-2" show-backdrop="false">
             <ng-template>
               <ion-datetime
                 #popoverDatetime
                 #popoverHour
-                presentation="date-time"
+                presentation="time-date"
                 (ionChange)="[date = popoverDatetime.value, hour = popoverHour.value]"
                 formControlName="date"
-                showDefaultButtons ="true"
               ></ion-datetime>
             </ng-template>
           </ion-popover>
         </ion-item>
       </ion-col>
       <ion-col size-sm="6" offset-sm="3">
-        <ion-item>
-          <ion-label position="floating">Service</ion-label>
-          <ion-input type="text" formControlName="service"></ion-input>
-        </ion-item>
+          <ion-item>
+            <ion-label>Service</ion-label>
+            <ion-select value="tuns" formControlName="service">
+              <ion-select-option value="Tuns">Tuns</ion-select-option>
+              <ion-select-option value="Barberit">Barberit</ion-select-option>
+              <ion-select-option value="Tuns-barberit">Tuns-Barberit</ion-select-option>
+            </ion-select>
+          </ion-item>
+              <!-- <ion-button expand="block" onclick="openPicker()">Pick Service</ion-button> -->
+          <!-- <ion-label position="floating">Service</ion-label>
+          <ion-input type="text" formControlName="service"></ion-input> -->
       </ion-col>
     </ion-grid>
   </form>
