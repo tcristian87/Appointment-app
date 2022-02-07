@@ -24,7 +24,7 @@ export class BookAppointmentPage implements OnInit, OnDestroy {
     this.appointsSub = this.appointService.appoints.subscribe((appoints) => {
       this.appoints = appoints;
     });
-    console.log(this.appoints)
+    console.log(this.appoints);
   }
 
   onEdit(appointsId: string, slidingItem: IonItemSliding) {
