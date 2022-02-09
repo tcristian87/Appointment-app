@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 import { AppointService } from '../appoint.service';
 
 
@@ -14,7 +15,7 @@ export class NewAppointPage implements OnInit {
   date: string;
   hour: string;
 
-  constructor(private appointService: AppointService, private router: Router) {}
+  constructor(private appointService: AppointService, private router: Router, private loadingCtrl: LoadingController) {}
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -44,15 +45,23 @@ export class NewAppointPage implements OnInit {
     if (!this.form.valid) {
       return;
     }
-    this.appointService.addAppoint(
-      this.form.value.name,
-      this.form.value.phone,
-      this.form.value.hour,
-      this.form.value.date,
-      this.form.value.service
-    );
-    this.form.reset();
-    this.router.navigate(['/home/tabs/book-appointment']);
+    this.loadingCtrl
+    .create ({
+      message: 'Creating appoint...'
+    }).then (loadingEl => {
+      loadingEl.present();
+      this.appointService.addAppoint(
+        this.form.value.name,
+        this.form.value.phone,
+        this.form.value.hour,
+        new Date(this.form.value.date),
+        this.form.value.service
+    ).subscribe(()=> {
+      loadingEl.dismiss();
+      this.form.reset();
+      this.router.navigate(['/home/tabs/book-appointment']);
+    });
+  });
   }
 
 }

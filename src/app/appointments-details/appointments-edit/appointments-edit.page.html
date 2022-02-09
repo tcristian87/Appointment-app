@@ -2,11 +2,11 @@
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button
-        defaultHref="/home/tabs/book-appointment"
+        [defaultHref]="'/home/tabs/book-appointment/ + appointId'"
       ></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="onEditAppoint()" [disabled]="!form.valid">
+      <ion-button (click)="onUpdateAppoint()" [disabled]="!form.valid">
         <ion-icon name="checkmark"></ion-icon>
       </ion-button>
     </ion-buttons>

@@ -21,15 +21,16 @@ export class AppointmentsDetailsPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe((paramMap) => {
+    this.route.paramMap.subscribe(paramMap => {
       if (!paramMap.has('appointId')) {
         this.navCtrl.navigateBack('/home/tabs/book-appointment');
         return;
       }
-
       this.appointSub = this.appointsService
-        .getClient(paramMap.get('appointId'))
-        .subscribe((appoint) => (this.appoint = appoint));
+        .getAppoint(paramMap.get('appointId'))
+        .subscribe(appoint => {
+this.appoint = appoint;
+        });
     });
   }
   ngOnDestroy(){

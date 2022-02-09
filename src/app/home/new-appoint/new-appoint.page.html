@@ -32,10 +32,16 @@
 
       <ion-col size-sm="7" offset-sm="3">
         <ion-item>
-          <ion-button slot ="start" id="open-date-input-2">
+          <!-- <ion-button slot ="start" id="open-date-input-2">
             <ion-icon icon="calendar"></ion-icon>
-          </ion-button>
-          <ion-input formControlName="date" [value]="date | date: 'dd-MM-yyyy'" slot="start" ></ion-input>
+          </ion-button> -->
+          <ion-buttons slot ="start">
+            <ion-button slot ="start" id="open-date-input-2">
+              <ion-icon icon="calendar"></ion-icon>
+            </ion-button>
+           <ion-label >Date</ion-label>
+          </ion-buttons>
+          <ion-input formControlName="date" [value]="date" slot="start" ></ion-input>
           <ion-input [value]="hour | date: 'shortTime'"></ion-input>
           <ion-popover trigger="open-date-input-2" show-backdrop="false">
             <ng-template>

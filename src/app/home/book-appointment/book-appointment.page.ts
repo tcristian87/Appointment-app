@@ -5,6 +5,7 @@ import { format, parseISO } from 'date-fns';
 import { IonItemSliding } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { toUnicode } from 'punycode';
 
 @Component({
   selector: 'app-book-appointment',
@@ -13,6 +14,7 @@ import { Subscription } from 'rxjs';
 })
 export class BookAppointmentPage implements OnInit, OnDestroy {
   appoints: Appoint[];
+  isLoading = false;
   date: string;
   datetime: any;
   hour: any;
@@ -24,6 +26,12 @@ export class BookAppointmentPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.appointsSub = this.appointService.appoints.subscribe((appoints) => {
       this.appoints = appoints;
+    });
+  }
+  ionViewWillEnter(){
+    this.isLoading = true;
+    this.appointService.fetchAppoints().subscribe(()=> {
+      this.isLoading = false;
     });
   }
 
