@@ -48,7 +48,7 @@
         *ngFor="let appoints of appoints | filter:  date"
       >
         <ion-item [routerLink]="['/', 'appointments-details', appoints.id]"
-          >{{appoints.hour}}</ion-item
+          >{{appoints.date | date: 'HH:mm'}}</ion-item
         >
       </ion-col>
     </ion-row>

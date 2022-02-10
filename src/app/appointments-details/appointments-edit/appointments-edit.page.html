@@ -2,7 +2,7 @@
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-back-button
-        [defaultHref]="'/home/tabs/book-appointment/ + appointId'"
+        defaultHref="./home/tabs/book-appointment/"
       ></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
@@ -42,8 +42,8 @@
           <ion-icon icon="time"></ion-icon>
         </ion-button>
         <ion-input
-          formControlName="hour"
-          [value]="hour | date: 'shortTime'"
+          formControlName="date"
+          [value]="hour | date: 'HH:mm'"
           slot="end"
         ></ion-input>
         <ion-popover trigger="open-date-input-2" show-backdrop="false">
@@ -52,7 +52,7 @@
               #popoverDatetime
               #popoverHour
               presentation="date-time"
-              (ionChange)="[date = formatDate(popoverDatetime.value), hour = popoverHour.value]"
+              (ionChange)="[date = popoverDatetime.value, hour = popoverHour.value]"
               showDefaultButtons="true"
             ></ion-datetime>
           </ng-template>

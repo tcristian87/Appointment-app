@@ -1,10 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { take, map, delay, tap, switchMap } from 'rxjs/operators';
+import { take, map,tap, switchMap } from 'rxjs/operators';
 import { BehaviorSubject, of } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { Appoint } from './appoint.model';
+import { format, parseISO } from 'date-fns';
 
 interface AppointData {
   name: string;
@@ -79,7 +80,7 @@ export class AppointService {
                   key,
                   resData[key].name,
                   resData[key].phone,
-                  resData[key].hour,
+                    resData[key].hour,
                   new Date(resData[key].date),
                   resData[key].service,
                   resData[key].userId
@@ -202,4 +203,6 @@ export class AppointService {
       })
     );
   }
+
 }
+

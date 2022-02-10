@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
+import { format, parseISO } from 'date-fns';
 import { AppointService } from '../appoint.service';
 
 
@@ -62,6 +63,9 @@ export class NewAppointPage implements OnInit {
       this.router.navigate(['/home/tabs/book-appointment']);
     });
   });
+  console.log(this.form.value.hour);
   }
-
+  // formatHour(value: string) {
+  //   return format(parseISO(value), 'HH:mm');
+  // }
 }

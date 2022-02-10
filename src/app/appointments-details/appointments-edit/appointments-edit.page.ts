@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -83,7 +84,7 @@ export class AppointmentsEditPage implements OnInit, OnDestroy {
             this.form.value.name,
             this.form.value.phone,
             this.form.value.hour,
-            this.form.value.date,
+            new Date(this.form.value.date),
             this.form.value.service
           )
           .subscribe(() => {
@@ -98,9 +99,9 @@ export class AppointmentsEditPage implements OnInit, OnDestroy {
       this.appointSub.unsubscribe();
     }
   }
-  formatDate(value: string) {
-    return format(parseISO(value), 'dd-MM-yyyy');
-  }
+  // formatDate(value: string) {
+  //   return format(parseISO(value), 'dd-MM-yyyy');
+  // }
   formatHour(value: string) {
     return format(parseISO(value), 'hh:mm');
   }
