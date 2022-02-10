@@ -5,7 +5,6 @@ import { format, parseISO } from 'date-fns';
 import { IonItemSliding } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { toUnicode } from 'punycode';
 
 @Component({
   selector: 'app-book-appointment',
@@ -48,8 +47,6 @@ export class BookAppointmentPage implements OnInit, OnDestroy {
     }
   }
   formatDate(value: string) {
-    return format(parseISO(value), 'dd-MM-yyyy');
+    return format(parseISO(value),  'yyyy-MM-dd');
   }
-
-
 }

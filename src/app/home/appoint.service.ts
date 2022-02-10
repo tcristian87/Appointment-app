@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { take, map,tap, switchMap } from 'rxjs/operators';
+import { take, map, tap, switchMap } from 'rxjs/operators';
 import { BehaviorSubject, of } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { Appoint } from './appoint.model';
@@ -80,8 +80,8 @@ export class AppointService {
                   key,
                   resData[key].name,
                   resData[key].phone,
-                    resData[key].hour,
-                  new Date(resData[key].date),
+                  resData[key].hour,
+                  resData[key].date,
                   resData[key].service,
                   resData[key].userId
                 )
@@ -118,7 +118,9 @@ export class AppointService {
   //     );
   // }
   getAppoint(id: string) {
-    return this.appoints.pipe(take(1), map(appoints => ({...appoints.find(a=> a.id === id)}))
+    return this.appoints.pipe(
+      take(1),
+      map((appoints) => ({ ...appoints.find((a) => a.id === id) }))
     );
   }
 
@@ -126,7 +128,7 @@ export class AppointService {
     name: string,
     phone: string,
     hour: string,
-    date: Date,
+    date: string,
     service: string
   ) {
     let generateId: string;
@@ -162,11 +164,11 @@ export class AppointService {
   }
   updateAppoint(
     appointId: string,
-    _name: string,
-    _phone: string,
-    _hour: string,
-    _date: Date,
-    _service: string
+    name: string,
+    phone: string,
+    hour: string,
+    date: string,
+    service: string
   ) {
     let updateAppoints: Appoint[];
     return this.appoints.pipe(
@@ -186,11 +188,11 @@ export class AppointService {
         const oldAppoint = updateAppoints[updateAppointIndex];
         updateAppoints[updateAppointIndex] = new Appoint(
           oldAppoint.id,
-          _name,
-          _phone,
-          _hour,
-          _date,
-          _service,
+          name,
+          phone,
+          hour,
+          date,
+          service,
           oldAppoint.userId
         );
         return this.http.put(
@@ -203,6 +205,4 @@ export class AppointService {
       })
     );
   }
-
 }
-

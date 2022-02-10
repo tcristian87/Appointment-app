@@ -5,7 +5,6 @@ import { LoadingController } from '@ionic/angular';
 import { format, parseISO } from 'date-fns';
 import { AppointService } from '../appoint.service';
 
-
 @Component({
   selector: 'app-new-appoint',
   templateUrl: './new-appoint.page.html',
@@ -16,7 +15,11 @@ export class NewAppointPage implements OnInit {
   date: string;
   hour: string;
 
-  constructor(private appointService: AppointService, private router: Router, private loadingCtrl: LoadingController) {}
+  constructor(
+    private appointService: AppointService,
+    private router: Router,
+    private loadingCtrl: LoadingController
+  ) {}
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -29,14 +32,14 @@ export class NewAppointPage implements OnInit {
         validators: [Validators.required],
       }),
       hour: new FormControl(null, {
-        updateOn: 'blur',
-        // validators: [Validators.required],
+        updateOn: 'change',
+        validators: [Validators.required],
       }),
       date: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required],
       }),
-    service: new FormControl(null, {
+      service: new FormControl(null, {
         updateOn: 'blur',
         validators: [Validators.required],
       }),
@@ -47,25 +50,28 @@ export class NewAppointPage implements OnInit {
       return;
     }
     this.loadingCtrl
-    .create ({
-      message: 'Creating appoint...'
-    }).then (loadingEl => {
-      loadingEl.present();
-      this.appointService.addAppoint(
-        this.form.value.name,
-        this.form.value.phone,
-        this.form.value.hour,
-        new Date(this.form.value.date),
-        this.form.value.service
-    ).subscribe(()=> {
-      loadingEl.dismiss();
-      this.form.reset();
-      this.router.navigate(['/home/tabs/book-appointment']);
-    });
-  });
-  console.log(this.form.value.hour);
+      .create({
+        message: 'Creating appoint...',
+      })
+      .then((loadingEl) => {
+        loadingEl.present();
+        this.appointService
+          .addAppoint(
+            this.form.value.name,
+            this.form.value.phone,
+            this.form.value.hour,
+            this.form.value.date,
+            this.form.value.service
+          )
+          .subscribe(() => {
+            loadingEl.dismiss();
+            this.form.reset();
+            this.router.navigate(['/home/tabs/book-appointment']);
+          });
+      });
+      console.log(this.form.value.hour);
+      console.log(this.form.value.date);
+
+    }
+  
   }
-  // formatHour(value: string) {
-  //   return format(parseISO(value), 'HH:mm');
-  // }
-}

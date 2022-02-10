@@ -1,4 +1,3 @@
-import { formatDate } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -17,8 +16,8 @@ export class AppointmentsEditPage implements OnInit, OnDestroy {
   appoint: Appoint;
   appointId: string;
   form: FormGroup;
+  hour: string | undefined;
   date: string;
-  hour: string;
   isLoading = false;
 
   private appointSub: Subscription;
@@ -50,11 +49,11 @@ export class AppointmentsEditPage implements OnInit, OnDestroy {
               updateOn: 'blur',
               validators: [Validators.required],
             }),
-            date: new FormControl(this.appoint.date, {
+            hour: new FormControl(this.appoint.hour, {
               updateOn: 'blur',
               validators: [Validators.required],
             }),
-            hour: new FormControl(this.appoint.date, {
+            date: new FormControl(this.appoint.date, {
               updateOn: 'blur',
               validators: [Validators.required],
             }),
@@ -84,25 +83,21 @@ export class AppointmentsEditPage implements OnInit, OnDestroy {
             this.form.value.name,
             this.form.value.phone,
             this.form.value.hour,
-            new Date(this.form.value.date),
+            this.form.value.date,
             this.form.value.service
           )
           .subscribe(() => {
             loadingEl.dismiss();
             this.form.reset();
             this.navCtrl.navigateBack('/home/tabs/book-appointment');
+            console.log(this.form.value.hour);
+            console.log(this.form.value.date);
           });
       });
   }
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     if (this.appointSub) {
       this.appointSub.unsubscribe();
     }
-  }
-  // formatDate(value: string) {
-  //   return format(parseISO(value), 'dd-MM-yyyy');
-  // }
-  formatHour(value: string) {
-    return format(parseISO(value), 'hh:mm');
   }
 }

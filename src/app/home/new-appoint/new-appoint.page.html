@@ -32,24 +32,22 @@
 
       <ion-col size-sm="7" offset-sm="3">
         <ion-item>
-          <!-- <ion-button slot ="start" id="open-date-input-2">
-            <ion-icon icon="calendar"></ion-icon>
-          </ion-button> -->
           <ion-buttons slot ="start">
             <ion-button slot ="start" id="open-date-input-2">
               <ion-icon icon="calendar"></ion-icon>
             </ion-button>
            <ion-label >Date</ion-label>
           </ion-buttons>
+          <ion-input formControlName="hour" [value]="hour | date: 'HH:mm'" ></ion-input>
           <ion-input formControlName="date" [value]="date"  slot="start" ></ion-input>
-          <ion-input formControlName="date" [value]="date | date: 'HH:mm'" ></ion-input>
           <ion-popover trigger="open-date-input-2" show-backdrop="false">
             <ng-template>
               <ion-datetime
                 #popoverDatetime
+                #popoverHour
                 presentation="time-date"
-                (ionChange)="[date = popoverDatetime.value]"
-                formControlName="date"
+                formControlName="hour"
+                (ionChange)="[date = popoverDatetime.value, hour = popoverHour.value]"
               ></ion-datetime>
             </ng-template>
           </ion-popover>
@@ -64,9 +62,6 @@
               <ion-select-option value="Tuns-barberit">Tuns-Barberit</ion-select-option>
             </ion-select>
           </ion-item>
-              <!-- <ion-button expand="block" onclick="openPicker()">Pick Service</ion-button> -->
-          <!-- <ion-label position="floating">Service</ion-label>
-          <ion-input type="text" formControlName="service"></ion-input> -->
       </ion-col>
     </ion-grid>
   </form>
