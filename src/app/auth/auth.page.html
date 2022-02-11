@@ -13,7 +13,7 @@
             <ion-item>
               <ion-label position="floating">E-mail</ion-label>
               <ion-input
-                type="email"
+                type="text"
                 ngModel
                 name="email"
                 required
@@ -56,8 +56,13 @@
           >
             Switch to {{isLogin? 'Signup': 'Login'}}</ion-button
           >
-          <ion-button [disabled]="!f.valid" type="submit" (click)="onLogin()" expand="block">
-            Login
+          <ion-button
+            [disabled]="!f.valid"
+            type="submit"
+            expand="block"
+            [disabled]="!f.valid"
+          >
+            {{isLogin? 'Login' : 'Signup'}}
           </ion-button>
         </ion-col>
       </ion-row>

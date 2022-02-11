@@ -5,7 +5,6 @@ import { take, map, tap, switchMap } from 'rxjs/operators';
 import { BehaviorSubject, of } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { Appoint } from './appoint.model';
-import { format, parseISO } from 'date-fns';
 
 interface AppointData {
   name: string;
@@ -16,42 +15,6 @@ interface AppointData {
   userId: string;
 }
 
-// [
-//   new Appoint(
-//     'c1',
-//     'Cristi',
-//     '0741879460',
-//     '10:30',
-//     new Date('10-02-2022'),
-//     'Tuns',
-//     'abc'
-//   ),
-//   new Appoint(
-//     'c2',
-//     'Mishi',
-//     '0741879460',
-//     '11:00',
-//     new Date('09-02-2022'),
-//     'Tuns',
-//     'abc'
-//   ),
-//   new Appoint(
-//     'c3',
-//     'Radu',
-//     '0741879460',
-//     '11:30',
-//     new Date('08-02-2022'),
-//     'Tuns',
-//     'abc'
-//   ),
-//   new Appoint(
-//     'c4',
-//     'Ciprian',
-//     '0741879460',
-//     '12:00',
-//     new Date('07-02-2022'),
-//     'Tuns',
-//     'abc'
 
 @Injectable({
   providedIn: 'root',
@@ -132,14 +95,21 @@ export class AppointService {
     service: string
   ) {
     let generateId: string;
-    const newAppoint = new Appoint(
+    let newAppoint: Appoint;
+    return this.authService.userId.pipe(
+      take(1),
+      switchMap(userId => {
+        if(!userId) {
+          throw new Error ('No user found!');
+        }
+      newAppoint = new Appoint(
       Math.random().toString(),
       name,
       phone,
       hour,
       date,
       service,
-      this.authService.userId
+      userId
     );
     // eslint-disable-next-line max-len
     return this.http
@@ -147,7 +117,7 @@ export class AppointService {
         'https://ionic-appoint-app-default-rtdb.europe-west1.firebasedatabase.app/appoints.json',
         { ...newAppoint, id: null }
       )
-      .pipe(
+      }),
         switchMap((resData) => {
           generateId = resData.name;
           return this.appoints;
@@ -157,7 +127,7 @@ export class AppointService {
           newAppoint.id = generateId;
           this._appoints.next(appoints.concat(newAppoint));
         })
-      );
+    );
     // this.appoints.pipe(take(1)).subscribe((appoints) => {
     //   this._appoints.next(appoints.concat(newAppoint));
     // });

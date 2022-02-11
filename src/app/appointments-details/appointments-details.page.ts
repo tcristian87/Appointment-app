@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
+import { AuthService } from '../auth/auth.service';
 import { Appoint } from '../home/appoint.model';
 import { AppointService } from '../home/appoint.service';
 
@@ -17,7 +19,8 @@ export class AppointmentsDetailsPage implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private appointsService: AppointService
+    private appointsService: AppointService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit() {
@@ -26,9 +29,19 @@ export class AppointmentsDetailsPage implements OnInit, OnDestroy {
         this.navCtrl.navigateBack('/home/tabs/book-appointment');
         return;
       }
-      this.appointSub = this.appointsService
-        .getAppoint(paramMap.get('appointId'))
-        .subscribe((appoint) => {
+      let fetchedUserId: string;
+      this.authService.userId
+      .pipe(
+        take(1),
+        switchMap(userId => {
+          if(!userId) {
+         throw new Error ('Found no user!')
+      }
+      fetchedUserId = userId;
+      return this.appointsService
+      .getAppoint(paramMap.get('appointId'));
+      }))
+       .subscribe((appoint) => {
           this.appoint = appoint;
         });
     });
