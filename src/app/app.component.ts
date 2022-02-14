@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { Capacitor  } from '@capacitor/core';
+import { SplashScreen } from '@capacitor/splash-screen';
 import { Platform } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { AuthService } from './auth/auth.service';
@@ -20,7 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
   initializeApp() {
     this.platform.ready().then(() => {
       if (Capacitor.isPluginAvailable('SplashScreen')) {
-        Plugins.SplashScreen.hide();
+        SplashScreen.hide();
       }
     });
   }

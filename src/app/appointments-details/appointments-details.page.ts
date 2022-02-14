@@ -1,8 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  AlertController,
+  LoadingController,
+  NavController,
+} from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
+import { switchMap, take, tap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 import { Appoint } from '../home/appoint.model';
 import { AppointService } from '../home/appoint.service';
@@ -14,13 +18,17 @@ import { AppointService } from '../home/appoint.service';
 })
 export class AppointmentsDetailsPage implements OnInit, OnDestroy {
   appoint: Appoint;
+  appointId: string;
+  isLoading = false;
   private appointSub: Subscription;
 
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private appointsService: AppointService,
-    private authService: AuthService,
+    private appointService: AppointService,
+    private alertCtrl: AlertController,
+    private router: Router,
+    private loadingCtrl: LoadingController
   ) {}
 
   ngOnInit() {
@@ -29,23 +37,52 @@ export class AppointmentsDetailsPage implements OnInit, OnDestroy {
         this.navCtrl.navigateBack('/home/tabs/book-appointment');
         return;
       }
-      let fetchedUserId: string;
-      this.authService.userId
-      .pipe(
-        take(1),
-        switchMap(userId => {
-          if(!userId) {
-         throw new Error ('Found no user!')
-      }
-      fetchedUserId = userId;
-      return this.appointsService
-      .getAppoint(paramMap.get('appointId'));
-      }))
-       .subscribe((appoint) => {
-          this.appoint = appoint;
-        });
+      this.appointId = paramMap.get('appointId');
+      this.isLoading = true;
+      this.appointSub = this.appointService
+        .getAppoint(paramMap.get('appointId'))
+        .subscribe(
+          (appoint) => {
+            this.appoint = appoint;
+            this.isLoading = false;
+          },
+          (error) => {
+            this.alertCtrl
+              .create({
+                header: 'An error ocurred!',
+                message: 'Could not load appoint.',
+                buttons: [
+                  {
+                    text: 'Okay',
+                    handler: () => {
+                      this.router.navigate(['/home/tabs/book-appointment']);
+                    },
+                  },
+                ],
+              })
+              .then((alertEl) => alertEl.present());
+          }
+        );
     });
   }
+
+  onEdit(appointsId: string) {
+    this.router.navigate([
+      '/appointments-details/appointments-edit',
+      appointsId,
+    ]);
+  }
+
+  onDelete(appointId: string) {
+    this.loadingCtrl.create({ message: 'Deleting...' }).then((loadingEl) => {
+      loadingEl.present();
+      this.appointService.onDeleting(appointId).subscribe(() => {
+        loadingEl.dismiss();
+      });
+      this.router.navigate(['/home/tabs/book-appointment']);
+    });
+  }
+
   ngOnDestroy() {
     if (this.appointSub) {
       this.appointSub.unsubscribe();

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, from } from 'rxjs';
-import { Plugins } from '@capacitor/core';
+import { Storage } from '@capacitor/storage';
 import { map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { User } from './user.model';
@@ -21,6 +21,7 @@ export interface AuthResponseData {
 })
 export class AuthService {
   private _user = new BehaviorSubject<User>(null);
+  private activeLogoutTimer: any;
 
   get userIsAuthenticated() {
     // eslint-disable-next-line no-underscore-dangle
@@ -47,11 +48,11 @@ export class AuthService {
       })
     );
   }
-  // eslint-disable-next-line @typescript-eslint/member-ordering
+
   constructor(private http: HttpClient) {}
 
   autoLogin() {
-    return from(Plugins.Storage.get({ key: 'authData' })).pipe(
+    return from(Storage.get({ key: 'authData' })).pipe(
       map((storedData) => {
         if (!storedData || !storedData.value) {
           return null;
@@ -77,6 +78,7 @@ export class AuthService {
       tap((user) => {
         if (user) {
           this._user.next(user);
+          this.autoLogout(user.tokenDuration);
         }
       }),
       map((user) => {
@@ -102,22 +104,42 @@ export class AuthService {
       )
       .pipe(tap(this.setUserData.bind(this)));
   }
+
+  ngOnDestroy() {
+    if (this.activeLogoutTimer) {
+      clearTimeout(this.activeLogoutTimer);
+    }
+    this._user.next(null);
+    Storage.remove({ key: 'authData' });
+  }
+
   logout() {
     this._user.next(null);
-    Plugins.Storage.remove({key: 'authData'})
+    Storage.remove({ key: 'authData' });
   }
+
+  private autoLogout(duration: number) {
+    if (this.activeLogoutTimer) {
+      clearTimeout(this.activeLogoutTimer);
+    }
+    this.activeLogoutTimer;
+    setTimeout(() => {
+      this.logout();
+    }, duration);
+  }
+
   private setUserData(userData: AuthResponseData) {
     const expirationTime = new Date(
       new Date().getTime() + +userData.expiresIn * 1000
     );
-    this._user.next(
-      new User(
-        userData.localId,
-        userData.email,
-        userData.idToken,
-        expirationTime
-      )
+    const user = new User(
+      userData.localId,
+      userData.email,
+      userData.idToken,
+      expirationTime
     );
+    this._user.next(user);
+    this.autoLogout(user.tokenDuration);
     this.storeAuthDate(
       userData.localId,
       userData.idToken,
@@ -125,6 +147,7 @@ export class AuthService {
       userData.email
     );
   }
+
   private storeAuthDate(
     userdId: string,
     token: string,
@@ -137,6 +160,17 @@ export class AuthService {
       tokenExpirationDate: tokenExpirationDate,
       email: email,
     });
-    Plugins.Storage.set({ key: 'authData', value: data });
+    Storage.set({ key: 'authData', value: data });
+  }
+  get token() {
+    return this._user.asObservable().pipe(
+      map(user => {
+        if (user) {
+          return user.token;
+        } else {
+          return null;
+        }
+      })
+    );
   }
 }

@@ -2,9 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Appoint } from '../appoint.model';
 import { AppointService } from '../appoint.service';
 import { format, parseISO } from 'date-fns';
-import { IonItemSliding } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
+import { switchMap, take } from 'rxjs/operators';
+import { formatRelativeWithOptions } from 'date-fns/fp';
 
 @Component({
   selector: 'app-book-appointment',
@@ -18,15 +20,17 @@ export class BookAppointmentPage implements OnInit, OnDestroy {
   datetime: any;
   hour: any;
 
+
   private appointsSub: Subscription;
 
-  constructor(private appointService: AppointService, private router: Router) {}
+  constructor(private appointService: AppointService, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.appointsSub = this.appointService.appoints.subscribe((appoints) => {
+     this.appointsSub = this.appointService.appoints.subscribe((appoints) => {
       this.appoints = appoints;
-    });
+   });
   }
+
   ionViewWillEnter(){
     this.isLoading = true;
     this.appointService.fetchAppoints().subscribe(()=> {
@@ -34,14 +38,8 @@ export class BookAppointmentPage implements OnInit, OnDestroy {
     });
   }
 
-  onEdit(appointsId: string, slidingItem: IonItemSliding) {
-    slidingItem.close();
-    this.router.navigate([
-      '/appointments-details/appointments-edit',
-      appointsId,
-    ]);
-  }
-  ngOnDestroy() {
+
+   ngOnDestroy() {
     if (this.appointsSub) {
       this.appointsSub.unsubscribe();
     }
@@ -49,4 +47,5 @@ export class BookAppointmentPage implements OnInit, OnDestroy {
   formatDate(value: string) {
     return format(parseISO(value),  'yyyy-MM-dd');
   }
+
 }

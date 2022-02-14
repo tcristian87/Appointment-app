@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
-import { format, parseISO } from 'date-fns';
 import { Subscription } from 'rxjs';
 import { AppointService } from 'src/app/home/appoint.service';
 import { Appoint } from '../../home/appoint.model';
@@ -21,6 +20,7 @@ export class AppointmentsEditPage implements OnInit, OnDestroy {
   isLoading = false;
 
   private appointSub: Subscription;
+
   constructor(
     private route: ActivatedRoute,
     private appointService: AppointService,
@@ -35,6 +35,7 @@ export class AppointmentsEditPage implements OnInit, OnDestroy {
         return;
       }
       this.appointId = paramMap.get('appointId');
+      console.log(this.appointId)
       this.isLoading = true;
       this.appointSub = this.appointService
         .getAppoint(paramMap.get('appointId'))
@@ -90,8 +91,8 @@ export class AppointmentsEditPage implements OnInit, OnDestroy {
             loadingEl.dismiss();
             this.form.reset();
             this.navCtrl.navigateBack('/home/tabs/book-appointment');
-            console.log(this.form.value.hour);
-            console.log(this.form.value.date);
+            // console.log(this.form.value.hour);
+            // console.log(this.form.value.date);
           });
       });
   }

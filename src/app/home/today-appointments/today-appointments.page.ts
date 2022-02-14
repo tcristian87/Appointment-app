@@ -27,6 +27,12 @@ export class TodayAppointmentsPage implements OnInit, OnDestroy {
       this.appoints = appoint;
     });
   }
+  ionViewWillEnter(){
+    this.isLoading = true;
+    this.appointsService.fetchAppoints().subscribe(()=> {
+      this.isLoading = false;
+    });
+  }
 
   onEdit(appointsId: string, slidingCard: IonItemSliding) {
     slidingCard.close();

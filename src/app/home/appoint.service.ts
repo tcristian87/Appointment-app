@@ -15,7 +15,6 @@ interface AppointData {
   userId: string;
 }
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -52,7 +51,6 @@ export class AppointService {
             }
           }
           return appoints;
-          // return [];
         }),
         tap((appoints) => {
           this._appoints.next(appoints);
@@ -60,31 +58,25 @@ export class AppointService {
       );
   }
 
-  // getAppoint(id: string) {
-  //   return this.http
-  //     .get<AppointData>(
-  //       `https://ionic-appoint-app-default-rtdb.europe-west1.firebasedatabase.app/appoints/${id}.json`
-  //     )
-  //     .pipe(
-  //       // eslint-disable-next-line arrow-body-style
-  //       map(appointData => {
-  //         return new Appoint(
-  //           id,
-  //           appointData.name,
-  //           appointData.phone,
-  //           appointData.hour,
-  //           new Date(appointData.date),
-  //           appointData.service,
-  //           appointData.userId
-  //         );
-  //       })
-  //     );
-  // }
   getAppoint(id: string) {
-    return this.appoints.pipe(
-      take(1),
-      map((appoints) => ({ ...appoints.find((a) => a.id === id) }))
-    );
+    return this.http
+      .get<AppointData>(
+        `https://ionic-appoint-app-default-rtdb.europe-west1.firebasedatabase.app/appoints/${id}.json`
+      )
+      .pipe(
+        // eslint-disable-next-line arrow-body-style
+        map((appointData) => {
+          return new Appoint(
+            id,
+            appointData.name,
+            appointData.phone,
+            appointData.hour,
+            appointData.date,
+            appointData.service,
+            appointData.userId
+          );
+        })
+      );
   }
 
   addAppoint(
@@ -98,35 +90,34 @@ export class AppointService {
     let newAppoint: Appoint;
     return this.authService.userId.pipe(
       take(1),
-      switchMap(userId => {
-        if(!userId) {
-          throw new Error ('No user found!');
+      switchMap((userId) => {
+        if (!userId) {
+          throw new Error('No user found!');
         }
-      newAppoint = new Appoint(
-      Math.random().toString(),
-      name,
-      phone,
-      hour,
-      date,
-      service,
-      userId
-    );
-    // eslint-disable-next-line max-len
-    return this.http
-      .post<{ name: string }>(
-        'https://ionic-appoint-app-default-rtdb.europe-west1.firebasedatabase.app/appoints.json',
-        { ...newAppoint, id: null }
-      )
+        newAppoint = new Appoint(
+          Math.random().toString(),
+          name,
+          phone,
+          hour,
+          date,
+          service,
+          userId
+        );
+        // eslint-disable-next-line max-len
+        return this.http.post<{ name: string }>(
+          'https://ionic-appoint-app-default-rtdb.europe-west1.firebasedatabase.app/appoints.json',
+          { ...newAppoint, id: null }
+        );
       }),
-        switchMap((resData) => {
-          generateId = resData.name;
-          return this.appoints;
-        }),
-        take(1),
-        tap((appoints) => {
-          newAppoint.id = generateId;
-          this._appoints.next(appoints.concat(newAppoint));
-        })
+      switchMap((resData) => {
+        generateId = resData.name;
+        return this.appoints;
+      }),
+      take(1),
+      tap((appoints) => {
+        newAppoint.id = generateId;
+        this._appoints.next(appoints.concat(newAppoint));
+      })
     );
     // this.appoints.pipe(take(1)).subscribe((appoints) => {
     //   this._appoints.next(appoints.concat(newAppoint));
@@ -172,6 +163,24 @@ export class AppointService {
       }),
       tap(() => {
         this._appoints.next(updateAppoints);
+      })
+    );
+  }
+
+  onDeleting(appointId: string) {
+    return this.authService.token.pipe(
+      take(1),
+      switchMap((token) => {
+        return this.http.delete(
+          `https://ionic-appoint-app-default-rtdb.europe-west1.firebasedatabase.app/appoints/${appointId}.json?auth=${token}`
+        );
+      }),
+      switchMap(() => {
+        return this.appoints;
+      }),
+      take(1),
+      tap((appoints) => {
+        this._appoints.next(appoints.filter((a) => a.id !== appointId));
       })
     );
   }

@@ -6,7 +6,7 @@
       ></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="onUpdateAppoint()" [disabled]="!form.valid">
+      <ion-button (click)="onUpdateAppoint()" [disabled]="!form?.valid">
         <ion-icon name="checkmark"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -15,7 +15,12 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <form [formGroup]="form">
+  <div>
+    <ion-spinner *ngIf="isLoading">
+
+    </ion-spinner>
+  </div>
+  <form [formGroup]="form" *ngIf="!isLoading">
     <ion-col size-sm="6" offset-sm="3">
       <ion-item>
         <ion-label

@@ -71,7 +71,6 @@ export class NewAppointPage implements OnInit {
       });
       console.log(this.form.value.hour);
       console.log(this.form.value.date);
-
     }
-  
+
   }
