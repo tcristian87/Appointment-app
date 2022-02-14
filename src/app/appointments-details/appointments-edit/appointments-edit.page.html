@@ -1,9 +1,8 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button
-        defaultHref="/home/tabs/book-appointment"
-      ></ion-back-button>
+      <ion-back-button >
+      </ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button (click)="onUpdateAppoint()" [disabled]="!form?.valid">
@@ -16,9 +15,7 @@
 
 <ion-content class="ion-padding">
   <div>
-    <ion-spinner *ngIf="isLoading">
-
-    </ion-spinner>
+    <ion-spinner *ngIf="isLoading"> </ion-spinner>
   </div>
   <form [formGroup]="form" *ngIf="!isLoading">
     <ion-col size-sm="6" offset-sm="3">
@@ -34,17 +31,19 @@
           <ion-input type="text" formControlName="phone"></ion-input>
         </ion-label>
       </ion-item>
+      <!-- <ion-item><ion-label>Old Hour</ion-label> {{appoint.hour}}</ion-item>
+      <ion-item><ion-label>Old Date</ion-label> {{appoint.date | date: 'EEEE MMM dd y'}}</ion-item> -->
       <ion-item>
         <ion-button slot="start" id="open-date-input-3">
           <ion-icon icon="calendar"></ion-icon>
         </ion-button>
         <ion-input
-          formControlName="hour"
-          [value]="hour |date: 'HH:mm'"
+        formControlName="hour"
+          [value]="hour | date: 'HH:mm'"
         ></ion-input>
         <ion-input
-          formControlName="date"
-          [value]="date"
+        formControlName="date"
+          [value]="date |date: 'EEEE MMM dd y'"
           slot="start"
         ></ion-input>
         <ion-popover trigger="open-date-input-3" show-backdrop="false">
@@ -53,18 +52,21 @@
               #popoverDatetime
               #popoverHour
               presentation="time-date"
-              formControlName="date"
-              formControlName="hour"
+              [min]="todayDate"
               (ionChange)="[date = popoverDatetime.value, hour = popoverHour.value]"
             ></ion-datetime>
           </ng-template>
         </ion-popover>
       </ion-item>
       <ion-item>
-        <ion-label
-          >Service
-          <ion-input type="text" formControlName="service"></ion-input>
-        </ion-label>
+        <ion-label>Service</ion-label>
+        <ion-select value="tuns" formControlName="service">
+          <ion-select-option value="Tuns">Tuns</ion-select-option>
+          <ion-select-option value="Barberit">Barberit</ion-select-option>
+          <ion-select-option value="Tuns-barberit"
+            >Tuns-Barberit</ion-select-option
+          >
+        </ion-select>
       </ion-item>
     </ion-col>
   </form>

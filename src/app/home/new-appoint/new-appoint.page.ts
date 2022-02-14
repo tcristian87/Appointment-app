@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { AppointService } from '../appoint.service';
 
 @Component({
@@ -12,8 +12,11 @@ import { AppointService } from '../appoint.service';
 })
 export class NewAppointPage implements OnInit {
   form: FormGroup;
-  date: string;
   hour: string;
+  date: string;
+  today = Date.now();
+  tDay = format(new Date(this.today), 'yyyy-MM-dd');
+  todayDate = this.tDay;
 
   constructor(
     private appointService: AppointService,
@@ -69,8 +72,7 @@ export class NewAppointPage implements OnInit {
             this.router.navigate(['/home/tabs/book-appointment']);
           });
       });
-      console.log(this.form.value.hour);
-      console.log(this.form.value.date);
-    }
-
+    console.log(this.form.value.hour);
+    console.log(this.form.value.date);
   }
+}

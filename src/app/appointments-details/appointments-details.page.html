@@ -1,9 +1,8 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button
-        defaultHref="/home/tabs/book-appointment"
-      ></ion-back-button>
+      <ion-back-button>
+      </ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button (click)="onEdit(appoint.id)">Edit</ion-button
@@ -35,11 +34,11 @@
               <ion-item lines="none"><ion-label>Service</ion-label> {{appoint.service}}</ion-item
               >
           </ion-col>
-          <ion-grid class="center">
+          <ion-grid >
             <ion-row>
-                   <ion-buttons >
+                   <ion-buttons>
             <ion-button (click)="onDelete(appoint.id)">
-              <ion-icon  name="trash" color="danger"></ion-icon>
+              <ion-icon  name="trash" color="danger" ></ion-icon>
             </ion-button>
           </ion-buttons>
             </ion-row>

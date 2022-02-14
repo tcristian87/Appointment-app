@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController, NavController } from '@ionic/angular';
+import { format } from 'date-fns';
 import { Subscription } from 'rxjs';
 import { AppointService } from 'src/app/home/appoint.service';
 import { Appoint } from '../../home/appoint.model';
@@ -15,9 +16,12 @@ export class AppointmentsEditPage implements OnInit, OnDestroy {
   appoint: Appoint;
   appointId: string;
   form: FormGroup;
-  hour: string | undefined;
+  hour: string;
   date: string;
   isLoading = false;
+  today = Date.now();
+  tDay = format(new Date(this.today), 'yyyy-MM-dd');
+  todayDate = this.tDay;
 
   private appointSub: Subscription;
 
@@ -35,7 +39,6 @@ export class AppointmentsEditPage implements OnInit, OnDestroy {
         return;
       }
       this.appointId = paramMap.get('appointId');
-      console.log(this.appointId)
       this.isLoading = true;
       this.appointSub = this.appointService
         .getAppoint(paramMap.get('appointId'))
@@ -51,11 +54,11 @@ export class AppointmentsEditPage implements OnInit, OnDestroy {
               validators: [Validators.required],
             }),
             hour: new FormControl(this.appoint.hour, {
-              updateOn: 'blur',
+              updateOn: 'change',
               validators: [Validators.required],
             }),
             date: new FormControl(this.appoint.date, {
-              updateOn: 'blur',
+              updateOn: 'change',
               validators: [Validators.required],
             }),
             service: new FormControl(this.appoint.service, {

@@ -46,7 +46,7 @@
                 #popoverDatetime
                 #popoverHour
                 presentation="time-date"
-                formControlName="hour"
+                [min]="todayDate"
                 (ionChange)="[date = popoverDatetime.value, hour = popoverHour.value]"
               ></ion-datetime>
             </ng-template>

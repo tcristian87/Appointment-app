@@ -4,9 +4,6 @@ import { AppointService } from '../appoint.service';
 import { format, parseISO } from 'date-fns';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/auth/auth.service';
-import { switchMap, take } from 'rxjs/operators';
-import { formatRelativeWithOptions } from 'date-fns/fp';
 
 @Component({
   selector: 'app-book-appointment',
@@ -19,6 +16,12 @@ export class BookAppointmentPage implements OnInit, OnDestroy {
   date: string;
   datetime: any;
   hour: any;
+
+  today = Date.now();
+  tDay = format(new Date(this.today), 'yyyy-MM-dd');
+  todayDate = this.tDay;
+
+  oldAppoints = false;
 
 
   private appointsSub: Subscription;
