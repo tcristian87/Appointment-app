@@ -1,6 +1,6 @@
 # FinalProject
 
-This is a mobile app that is stil under development
+This is a mobile app that is under development
 
 I made this app for a friend that have a hairstyle business
 
